@@ -1,10 +1,9 @@
 
-const initialize = (hostname) => {
-    const host = hostname || "https://www.okex.com"
+const initialize = () => {
     const endpoint = {
-        "instruments" : [host, "api/futures/v3/instruments"].join("/"),
-        "accounts" : [host, "api/futures/v3/accounts"].join("/"),
-        "orders" : [host, "api/futures/v3/orders"].join("/"),
+        "instruments" : "/api/futures/v3/instruments",
+        "accounts" : "/api/futures/v3/accounts",
+        "orders" : "/api/futures/v3/orders",
     }
     return endpoint
 }

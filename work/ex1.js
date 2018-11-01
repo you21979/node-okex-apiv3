@@ -1,5 +1,7 @@
 const PublicAPI = require("./public_api")
 
+const default_hostname = "https://www.okex.com"
+
 const papi = new PublicAPI()
 const inst_id = "BTC-USD-181228"
 //papi.ticker(inst_id).then(console.log)
