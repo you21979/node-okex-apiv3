@@ -15,11 +15,15 @@ class WalletAPI{
     signRequest(method, url, params){
         const headers = base.createSignHeaders(this.storage.apikey, this.storage.secret, this.storage.pass, method, url, params)
         const opt = base.createRequestParams(method, this.hostname + url, params, headers)
-        return opt ? rp(opt) : Promise.reject()
+        return opt ? rp(opt).catch( e => { throw e.error } ) : Promise.reject()
     }
-    wallet(){
-        const url = [this.endpoint.wallet].join("/")
+    wallet(currency = undefined){
+        const url = [this.endpoint.wallet, currency].join("/")
         return this.signRequest("GET", url, {})
+    }
+    transfer(currency, amount, from, to, option = {}){
+        const url = [this.endpoint.transfer].join("/")
+        return this.signRequest("POST", url, Object.assign({ currency, amount, from, to }, option)).catch(console.log)
     }
 }
 const apikey = ""

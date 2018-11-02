@@ -18,7 +18,7 @@ const createPostParams = (endpoint, params, headers) => {
     return {
         method: "POST",
         uri: endpoint,
-        form: params,
+        json: params,
         headers: headers,
         forever: true,
         transform2xxOnly: true,
@@ -49,6 +49,7 @@ const prehash = (timestamp, method, request, body) => {
 
 const createAuthHeaders = (apikey, passphase, sign, timestamp) => {
     return {
+        "Content_Type": "application/json",
         "OK-ACCESS-KEY": apikey,
         "OK-ACCESS-SIGN": sign,
         "OK-ACCESS-TIMESTAMP": timestamp.toString(),
@@ -58,7 +59,12 @@ const createAuthHeaders = (apikey, passphase, sign, timestamp) => {
 
 const createSignHeaders = (apikey, secret, pass, method, url, params) => {
     const timestamp = new Date().toISOString()
-    const body = qstringify(params)
+    let body = ''
+    if(method === "POST"){
+        body = JSON.stringify(params)
+    }else{
+        body = qstringify(params)
+    }
     const message = prehash(timestamp, method, url, body)
     const headers = createAuthHeaders(apikey, pass, sign("sha256", secret, message), timestamp)
     return headers
