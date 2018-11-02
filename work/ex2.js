@@ -6,8 +6,10 @@ const default_hostname = "https://www.okex.com"
 
 class WalletAPI{
     constructor(apikey, secret, pass, hostname = default_hostname){
+        const {base, endpoint} = initialize()
         this.hostname = hostname
-        this.endpoint = initialize()
+        this.base = base.account
+        this.endpoint = endpoint.account
         this.storage = {apikey, secret, pass}
     }
     signRequest(method, url, params){
@@ -15,8 +17,8 @@ class WalletAPI{
         const opt = base.createRequestParams(method, this.hostname + url, params, headers)
         return opt ? rp(opt) : Promise.reject()
     }
-    aaaa(inst_id){
-        const url = [this.endpoint.accounts, "btc", "leverage"].join("/")
+    wallet(){
+        const url = [this.endpoint.wallet].join("/")
         return this.signRequest("GET", url, {})
     }
 }
@@ -24,5 +26,5 @@ const apikey = ""
 const secret = ""
 const pass = ""
 const wapi = new WalletAPI(apikey, secret, pass)
-wapi.aaaa().then(console.log)
+wapi.wallet().then(console.log)
 

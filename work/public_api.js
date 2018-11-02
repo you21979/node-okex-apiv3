@@ -6,8 +6,9 @@ const default_hostname = "https://www.okex.com"
 
 class PublicAPI{
     constructor(hostname = default_hostname){
+        const {base, endpoint} = initialize()
         this.hostname = hostname
-        this.endpoint = initialize()
+        this.endpoint = endpoint.futures
     }
     index(inst_id){
         const opt = base.createGetParams([this.hostname + this.endpoint.instruments, inst_id, "index"].join("/"), {})
