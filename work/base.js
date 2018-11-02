@@ -9,7 +9,7 @@ const createGetParams = (endpoint, params, headers) => {
         headers: headers,
         forever: true,
         transform2xxOnly: true,
-        transform: function (body) {
+        transform: (body) => {
             return JSON.parse(body);
         },
     }
@@ -22,10 +22,20 @@ const createPostParams = (endpoint, params, headers) => {
         headers: headers,
         forever: true,
         transform2xxOnly: true,
-        transform: function (body) {
+        transform: (body) => {
             return JSON.parse(body);
         },
     }
+}
+
+const createRequestParams = (method, endpoint, params, headers) => {
+    switch(method){
+    case "GET":
+        return createGetParams(endpoint, params, headers)
+    case "POST":
+        return createPostParams(endpoint, params, headers)
+    }
+    return void 0
 }
 
 const sign = (argo, secret, data) => {
@@ -61,4 +71,5 @@ module.exports = {
     createSignHeaders,
     createGetParams,
     createPostParams,
+    createRequestParams,
 }

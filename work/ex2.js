@@ -10,12 +10,14 @@ class WalletAPI{
         this.endpoint = initialize()
         this.storage = {apikey, secret, pass}
     }
+    signRequest(method, url, params){
+        const headers = base.createSignHeaders(this.storage.apikey, this.storage.secret, this.storage.pass, method, url, params)
+        const opt = base.createRequestParams(method, this.hostname + url, params, headers)
+        return opt ? rp(opt) : Promise.reject()
+    }
     aaaa(inst_id){
         const url = [this.endpoint.accounts, "btc", "leverage"].join("/")
-        const params = {}
-        const headers = base.createSignHeaders(this.storage.apikey, this.storage.secret, this.storage.pass, "GET", url, params)
-        const opt = base.createGetParams(this.hostname + url, params, headers)
-        return rp(opt)
+        return this.signRequest("GET", url, {})
     }
 }
 const apikey = ""
