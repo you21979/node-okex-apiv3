@@ -4,7 +4,7 @@ const base = require("./base")
 
 const default_hostname = "https://www.okex.com"
 
-class PrivateInterface{
+class SignRequest{
     constructor(apikey, secret, pass, hostname = default_hostname){
         this.hostname = hostname
         this.storage = {apikey, secret, pass}
@@ -16,45 +16,46 @@ class PrivateInterface{
     }
 }
 
-class FuturesAPI extends PrivateInterface {
-    constructor(apikey, secret, pass, hostname = default_hostname){
-        super(apikey, secret, pass, hostname)
+class FuturesAPI {
+    constructor( requester ){
         const {base, endpoint} = initialize()
         this.base = base.futures
         this.endpoint = endpoint.futures
+        this.req = requester
     }
     position(){
         const url = [this.endpoint.position].join("/")
-        return this.signRequest("GET", url, {})
+        return this.req.signRequest("GET", url, {})
     }
     positionContract(inst_id){
         const url = [this.base, inst_id, "position"].join("/")
-        return this.signRequest("GET", url, {})
+        return this.req.signRequest("GET", url, {})
     }
     accounts(){
         const url = [this.endpoint.accounts].join("/")
-        return this.signRequest("GET", url, {})
+        return this.req.signRequest("GET", url, {})
     }
 }
 
-class WalletAPI extends PrivateInterface {
-    constructor(apikey, secret, pass, hostname = default_hostname){
-        super(apikey, secret, pass, hostname)
+class WalletAPI {
+    constructor( requester ){
         const {base, endpoint} = initialize()
         this.base = base.account
         this.endpoint = endpoint.account
+        this.req = requester
     }
     wallet(currency = undefined){
         const url = [this.endpoint.wallet, currency].join("/")
-        return this.signRequest("GET", url, {})
+        return this.req.signRequest("GET", url, {})
     }
     transfer(currency, amount, from, to, option = {}){
         const url = [this.endpoint.transfer].join("/")
-        return this.signRequest("POST", url, Object.assign({ currency, amount, from, to }, option))
+        return this.req.signRequest("POST", url, Object.assign({ currency, amount, from, to }, option))
     }
 }
 
 module.exports = {
+    SignRequest,
     FuturesAPI,
     WalletAPI,
 }
