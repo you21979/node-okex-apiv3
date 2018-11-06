@@ -22,9 +22,11 @@ const createPostParams = (endpoint, params, headers) => {
         headers: headers,
         forever: true,
         transform2xxOnly: true,
+/*
         transform: (body) => {
             return JSON.parse(body);
         },
+*/
     }
 }
 

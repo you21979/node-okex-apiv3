@@ -31,9 +31,33 @@ class FuturesAPI {
         const url = [this.base, inst_id, "position"].join("/")
         return this.req.signRequest("GET", url, {})
     }
-    accounts(){
-        const url = [this.endpoint.accounts].join("/")
+    accounts(currency){
+        const url = [this.endpoint.accounts,currency].join("/")
         return this.req.signRequest("GET", url, {})
+    }
+    leverage(currency){
+        const url = [this.endpoint.accounts,currency,"leverage"].join("/")
+        return this.req.signRequest("GET", url, {})
+    }
+    ledger(currency){
+        const url = [this.endpoint.accounts,currency,"ledger"].join("/")
+        return this.req.signRequest("GET", url, {})
+    }
+    postLeverage(currency, leverage){
+        const url = [this.endpoint.accounts,currency,"leverage"].join("/")
+        return this.req.signRequest("POST", url, { leverage, currency })
+    }
+    postOrder(instrument_id, type, price, size, leverage, option = {}){
+        const url = [this.endpoint.order].join("/")
+        return this.req.signRequest("POST", url, Object.assign({ instrument_id, type, price, size, leverage }, option))
+    }
+    postOrders(instrument_id, leverage, orders){
+        const url = [this.endpoint.orders].join("/")
+        return this.req.signRequest("POST", url, { instrument_id, leverage, orders_data : orders })
+    }
+    postCancelOrder(order_id, instrument_id, timestamp){
+        const url = [this.endpoint.cancel_order].join("/")
+        return this.req.signRequest("POST", url, { order_id, instrument_id, timestamp })
     }
 }
 
