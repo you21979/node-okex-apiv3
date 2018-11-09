@@ -1,8 +1,10 @@
 const initialize = require("./initialize")
 const constant = require("./constant")
+const assert = require("assert")
 
 class FuturesAPI {
     constructor( requester ){
+        assert(requester.isSign())
         const {base, endpoint} = initialize()
         this.base = base.futures
         this.endpoint = endpoint.futures

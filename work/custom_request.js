@@ -13,6 +13,9 @@ class BaseRequest{
             forever : true,
         }
     }
+    isSign(){
+        return false
+    }
     request(method, url, params, headers = {}){
         const reqopt = base.createRequestParams(method, this.hostname + url, params, Object.assign(this.headers, headers))
         const opt = Object.assign( reqopt, this.options )
@@ -24,6 +27,9 @@ class SignRequest extends BaseRequest{
     constructor(apikey, secret, pass, hostname = constant.HOSTNAME){
         super(hostname)
         this.storage = {apikey, secret, pass}
+    }
+    isSign(){
+        return true
     }
     signRequest(method, url, params, headers){
         const addheaders = base.createSignHeaders(this.storage.apikey, this.storage.secret, this.storage.pass, method, url, params)
