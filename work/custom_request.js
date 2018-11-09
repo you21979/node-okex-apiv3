@@ -5,9 +5,17 @@ const constant = require("./constant")
 class BaseRequest{
     constructor(hostname = constant.HOSTNAME){
         this.hostname = hostname
+        this.headers = {
+            "User-Agent": "okex-apiv3",
+            "Content-Type": "application/json",
+        }
+        this.options = {
+            forever : true,
+        }
     }
     request(method, url, params, headers = {}){
-        const opt = base.createRequestParams(method, this.hostname + url, params, headers)
+        const reqopt = base.createRequestParams(method, this.hostname + url, params, Object.assign(this.headers, headers))
+        const opt = Object.assign( reqopt, this.options )
         return opt ? rp(opt).catch( e => { throw e.error } ) : Promise.reject()
     }
 }

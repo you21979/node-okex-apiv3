@@ -7,7 +7,6 @@ const createGetParams = (endpoint, params, headers) => {
         uri: endpoint,
         qs: params,
         headers: headers,
-        forever: true,
         transform2xxOnly: true,
         transform: (body) => {
             return JSON.parse(body);
@@ -20,7 +19,6 @@ const createPostParams = (endpoint, params, headers) => {
         uri: endpoint,
         json: params,
         headers: headers,
-        forever: true,
         transform2xxOnly: true,
 /*
         transform: (body) => {
@@ -51,7 +49,6 @@ const prehash = (timestamp, method, request, body) => {
 
 const createAuthHeaders = (apikey, passphase, sign, timestamp) => {
     return {
-        "Content_Type": "application/json",
         "OK-ACCESS-KEY": apikey,
         "OK-ACCESS-SIGN": sign,
         "OK-ACCESS-TIMESTAMP": timestamp.toString(),
