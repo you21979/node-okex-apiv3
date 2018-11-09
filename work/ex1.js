@@ -1,8 +1,9 @@
 const public = require("./public_api")
+const cr = require("./custom_request")
 
-const default_hostname = "https://www.okex.com"
+const req = new cr.BaseRequest()
 
-const papi = new public.FuturesAPI()
+const papi = new public.FuturesAPI(req)
 const inst_id = "BTC-USD-181228"
 //papi.ticker(inst_id).then(console.log)
 papi.instruments().then(console.log)

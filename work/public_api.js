@@ -1,25 +1,11 @@
-const rp = require("request-promise")
 const initialize = require("./initialize")
-const base = require("./base")
-
-const default_hostname = "https://www.okex.com"
-
-class PublicRequest{
-    constructor(hostname = default_hostname){
-        this.hostname = hostname
-    }
-    request(method, url, params){
-        const opt = base.createRequestParams(method, this.hostname + url, params, {})
-        return opt ? rp(opt).catch( e => { throw e.error } ) : Promise.reject()
-    }
-}
 
 class FuturesAPI{
-    constructor(hostname = default_hostname){
+    constructor(requester){
         const {base, endpoint} = initialize()
         this.base = base.futures
         this.endpoint = endpoint.futures
-        this.req = new PublicRequest(hostname)
+        this.req = requester
     }
     index(inst_id){
         const method = "GET"

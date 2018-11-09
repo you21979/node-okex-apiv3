@@ -1,20 +1,5 @@
-const rp = require("request-promise")
 const initialize = require("./initialize")
-const base = require("./base")
-
-const default_hostname = "https://www.okex.com"
-
-class SignRequest{
-    constructor(apikey, secret, pass, hostname = default_hostname){
-        this.hostname = hostname
-        this.storage = {apikey, secret, pass}
-    }
-    signRequest(method, url, params){
-        const headers = base.createSignHeaders(this.storage.apikey, this.storage.secret, this.storage.pass, method, url, params)
-        const opt = base.createRequestParams(method, this.hostname + url, params, headers)
-        return opt ? rp(opt).catch( e => { throw e.error } ) : Promise.reject()
-    }
-}
+const constant = require("./constant")
 
 class FuturesAPI {
     constructor( requester ){
@@ -24,40 +9,58 @@ class FuturesAPI {
         this.req = requester
     }
     position(){
+        const method = "GET"
         const url = [this.endpoint.position].join("/")
-        return this.req.signRequest("GET", url, {})
+        const params = {}
+        return this.req.signRequest(method, url, params)
     }
     positionContract(inst_id){
+        const method = "GET"
         const url = [this.base, inst_id, "position"].join("/")
-        return this.req.signRequest("GET", url, {})
+        const params = {}
+        return this.req.signRequest(method, url, params)
     }
     accounts(currency){
+        const method = "GET"
         const url = [this.endpoint.accounts,currency].join("/")
-        return this.req.signRequest("GET", url, {})
+        const params = {}
+        return this.req.signRequest(method, url, params)
     }
     leverage(currency){
+        const method = "GET"
         const url = [this.endpoint.accounts,currency,"leverage"].join("/")
-        return this.req.signRequest("GET", url, {})
+        const params = {}
+        return this.req.signRequest(method, url, params)
     }
     ledger(currency){
+        const method = "GET"
         const url = [this.endpoint.accounts,currency,"ledger"].join("/")
-        return this.req.signRequest("GET", url, {})
+        const params = {}
+        return this.req.signRequest(method, url, params)
     }
     postLeverage(currency, leverage){
+        const method = "POST"
         const url = [this.endpoint.accounts,currency,"leverage"].join("/")
-        return this.req.signRequest("POST", url, { leverage, currency })
+        const params = { leverage, currency }
+        return this.req.signRequest(method, url, params)
     }
     postOrder(instrument_id, type, price, size, leverage, option = {}){
+        const method = "POST"
         const url = [this.endpoint.order].join("/")
-        return this.req.signRequest("POST", url, Object.assign({ instrument_id, type, price, size, leverage }, option))
+        const params = Object.assign({ instrument_id, type, price, size, leverage }, option)
+        return this.req.signRequest(method, url, params)
     }
     postOrders(instrument_id, leverage, orders){
+        const method = "POST"
         const url = [this.endpoint.orders].join("/")
-        return this.req.signRequest("POST", url, { instrument_id, leverage, orders_data : orders })
+        const params = { instrument_id, leverage, orders_data : orders }
+        return this.req.signRequest(method, url, params)
     }
     postCancelOrder(order_id, instrument_id, timestamp){
+        const method = "POST"
         const url = [this.endpoint.cancel_order].join("/")
-        return this.req.signRequest("POST", url, { order_id, instrument_id, timestamp })
+        const params = { order_id, instrument_id, timestamp }
+        return this.req.signRequest(method, url, params)
     }
 }
 
@@ -69,17 +72,20 @@ class WalletAPI {
         this.req = requester
     }
     wallet(currency = undefined){
+        const method = "GET"
         const url = [this.endpoint.wallet, currency].join("/")
-        return this.req.signRequest("GET", url, {})
+        const params = {}
+        return this.req.signRequest(method, url, params)
     }
     transfer(currency, amount, from, to, option = {}){
+        const method = "POST"
         const url = [this.endpoint.transfer].join("/")
-        return this.req.signRequest("POST", url, Object.assign({ currency, amount, from, to }, option))
+        const params = Object.assign({ currency, amount, from, to }, option)
+        return this.req.signRequest(method, url, params)
     }
 }
 
 module.exports = {
-    SignRequest,
     FuturesAPI,
     WalletAPI,
 }
