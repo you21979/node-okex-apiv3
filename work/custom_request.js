@@ -17,9 +17,9 @@ class SignRequest extends BaseRequest{
         super(hostname)
         this.storage = {apikey, secret, pass}
     }
-    signRequest(method, url, params){
-        const headers = base.createSignHeaders(this.storage.apikey, this.storage.secret, this.storage.pass, method, url, params)
-        return this.request( method, url, params, headers )
+    signRequest(method, url, params, headers){
+        const addheaders = base.createSignHeaders(this.storage.apikey, this.storage.secret, this.storage.pass, method, url, params)
+        return this.request( method, url, params, Object.assign(addheaders, headers) )
     }
 }
 
